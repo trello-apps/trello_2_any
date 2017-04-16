@@ -7,7 +7,7 @@ import argparse
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--client-api-key", help="your app's client api key", action="store", required=True)
-parser.add_argument("-t", "--token", help="access token", action="store", required=True)
+parser.add_argument("-t", "--token", help="your app's access token", action="store", required=True)
 parser.add_argument("-b", "--board-id", help="your trello board id", action="store", required=True)
 args = vars(parser.parse_args())
 
