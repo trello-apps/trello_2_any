@@ -44,3 +44,8 @@ trello.set_token(args['token'])
 extraction = TrelloExtraction(trello, args['board_id'])
 extraction.apply_transformer(MarkdownTransformer())
 ```
+
+## Compatibility
+
+It is compatible with both python 2.7+ and python 3.4+.
+Py3 requires the installation of [trello3](https://github.com/waynew/trello3) which is not available on pypi.
