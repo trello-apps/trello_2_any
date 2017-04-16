@@ -1,12 +1,12 @@
 from transformer import Transformer
 
 
-class AsciiDocTransformer(Transformer):
+class ConfluenceTransformer(Transformer):
     def transform_board_name(self, name):
-        return "{}\n{}".format(name, "=" * len(name))
+        return "h1. ".format(name)
 
     def transform_list_name(self, name):
-        return "{}\n{}".format(name, '-' * len(name))
+        return "{panel:title=" + name + "}"
 
     def transform_card_name(self, name):
         return "* {}".format(name)
