@@ -1,4 +1,4 @@
-from transformer import Transformer
+from .transformer import Transformer
 
 
 class MarkdownTransformer(Transformer):

@@ -26,16 +26,16 @@ class TrelloExtraction:
                 if action['type'] == 'commentCard']
 
     def _voters_id_to_username(self, trello, voters):
-        return map(lambda voter: trello.members.get(voter)['fullName'], voters)
+        return list(map(lambda voter: trello.members.get(voter)['fullName'], voters))
 
     def apply_transformer(self, transformer):
-        print transformer.transform_board_name(self.name)
+        print(transformer.transform_board_name(self.name))
         for list in self.board:
-            print transformer.transform_list_name(list.name)
+            print(transformer.transform_list_name(list.name))
             for card in self.board[list]:
-                print transformer.transform_card_name(card.name)
+                print(transformer.transform_card_name(card.name))
                 if len(card.comments) > 0:
                     for comment, author in card.comments:
-                        print transformer.transform_card_comment(comment, author)
+                        print(transformer.transform_card_comment(comment, author))
                 if len(card.voters) > 0:
-                    print transformer.transform_card_votes(card.voters)
+                    print(transformer.transform_card_votes(card.voters))

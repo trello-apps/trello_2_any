@@ -1,9 +1,9 @@
-from transformer import Transformer
+from .transformer import Transformer
 
 
 class ConfluenceTransformer(Transformer):
     def transform_board_name(self, name):
-        return "h1. ".format(name)
+        return "h1. {}".format(name)
 
     def transform_list_name(self, name):
         return "{panel:title=" + name + "}"
