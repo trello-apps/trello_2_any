@@ -2,3 +2,6 @@ secrets/
 .*
 !.gitignore
 *.pyc
+dist/
+build/
+*.egg*

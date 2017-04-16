@@ -7,5 +7,5 @@ setup(name='trello_2_any',
       author='aayoubi, celmasri',
       author_email='',
       license='MIT',
-      packages=['trello_2_any'],
+      packages=['trello_transformers', 'trello_model'],
       zip_safe=False)
