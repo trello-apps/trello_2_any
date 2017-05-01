@@ -65,7 +65,7 @@ https://trello.com/1/authorize?key=my_app_key&name=TEST&expiration=30days&respon
 - AsciiDoc
 - Atlassian Confluence 
 
-## Sample
+### Sample
 
 The following will retrieve all Trello lists from a given Trello board, and print it to stdout using a specific transformer:
 
@@ -73,7 +73,47 @@ The following will retrieve all Trello lists from a given Trello board, and prin
 trello = TrelloApi(args['client_api_key'])
 trello.set_token(args['token'])
 extraction = TrelloExtraction(trello, args['board_id'])
-extraction.apply_transformer(MarkdownTransformer())
+print(extraction.apply_transformer(MarkdownTransformer()))
+```
+
+## Jinja2 Templating
+
+You can also apply a Jinja2 template to render the board items.
+
+The rendering is called with the following context:
+- {'title', board_name, 'board_lists': board_lists}
+    - `board_lists` is a list of `List = namedtuple('List', ['id', 'name', 'cards'])`
+    - `cards` is a list of `Card = namedtuple('Card', ['id', 'name', 'comments', 'voters'])`
+    - `comments` is a list of `Comment = namedtuple('Comment', ['text', 'author'])`
+    - `voters` is a list of strings containing the full name of each  voter
+
+An example is given in `bin/jinja_template.py`.
+
+```
+extraction = TrelloExtraction(trello, args['board_id'])
+
+template = '''
+# {{ title }}
+
+{% for board_list in board_lists %}
+## {{ board_list.name }}
+    {% for card in board_list.cards %}
+- {{ card.name }}
+        {% if card.comments %}
+            {% for comment in card.comments %}
+    - comment by {{ comment.author }}: {{ comment.text }}
+            {% endfor %}
+        {% endif %}
+        {% if card.voters %}
+    - {{ card.voters|length }} vote(s), by: {{ card.voters | join(', ') }}
+        {% endif %}
+    {% endfor %}
+
+{% endfor %}
+'''
+extraction.apply_template(jinja2.Template(template,
+                                          trim_blocks=True,
+                                          lstrip_blocks=True))
 ```
 
 ## Compatibility

@@ -1,2 +1,3 @@
 trello
 requests
+jinja2
