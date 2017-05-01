@@ -17,8 +17,10 @@ class TrelloExtraction:
                 comments = [] if card['badges']['comments'] == 0 \
                     else self._retrieve_comments(trello, card['id'])
                 voters = [] if card['badges']['votes'] == 0 \
-                    else self._voters_id_to_username(trello, card['idMembersVoted'])
-                self.board[current_list].append(Card(card['id'], card['name'], comments, voters))
+                    else self._voters_id_to_username(trello,
+                                                     card['idMembersVoted'])
+                self.board[current_list].append(Card(card['id'],
+                                                card['name'], comments, voters))
 
     def _retrieve_comments(self, trello, card_id):
         return [(action['data']['text'], action['memberCreator']['fullName'])
@@ -26,7 +28,8 @@ class TrelloExtraction:
                 if action['type'] == 'commentCard']
 
     def _voters_id_to_username(self, trello, voters):
-        return list(map(lambda voter: trello.members.get(voter)['fullName'], voters))
+        return list(map(lambda voter: trello.members.get(voter)['fullName'],
+                        voters))
 
     def apply_transformer(self, transformer):
         print(transformer.transform_board_name(self.name))
@@ -36,6 +39,7 @@ class TrelloExtraction:
                 print(transformer.transform_card_name(card.name))
                 if len(card.comments) > 0:
                     for comment, author in card.comments:
-                        print(transformer.transform_card_comment(comment, author))
+                        print(transformer.transform_card_comment(comment,
+                                                                 author))
                 if len(card.voters) > 0:
                     print(transformer.transform_card_votes(card.voters))
