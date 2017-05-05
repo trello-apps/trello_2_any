@@ -12,7 +12,7 @@ python setup.py install # or pip install .
 Or, clone the repository from git and add its path to `PYTHONPATH`
 
 ```
-$ git clone https://github.com/aayoubi/trello_2_any.git
+$ git clone https://github.com/trello-apps/trello_2_any.git
 
 $ export PYTHONPATH=trello_2_any/:$PYTHONPATH
 
@@ -57,7 +57,7 @@ Access the following link to generate your access token:
 https://trello.com/1/authorize?key=my_app_key&name=TEST&expiration=30days&response_type=token&scope=read
 ```
 
-3. Copy the generated token to someplace safe!
+3. Copy the generated token to a place safe!
 
 ## Available Transformers
 
