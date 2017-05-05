@@ -1,8 +1,9 @@
-from trello import TrelloApi
-from trello_model import TrelloExtraction
+import argparse
 
 import jinja2
-import argparse
+from trello import TrelloApi
+
+from trello_model.converter import TrelloConverter
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--client-api-key", help="your app's client api key",
@@ -16,7 +17,7 @@ args = vars(parser.parse_args())
 trello = TrelloApi(args['client_api_key'])
 trello.set_token(args['token'])
 
-extraction = TrelloExtraction(trello, args['board_id'])
+converter = TrelloConverter(trello, args['board_id'])
 
 template = '''
 # {{ title }}
@@ -37,6 +38,6 @@ template = '''
 
 {% endfor %}
 '''
-extraction.apply_template(jinja2.Template(template,
-                                          trim_blocks=True,
-                                          lstrip_blocks=True))
+converter.to_template(jinja2.Template(template,
+                                      trim_blocks=True,
+                                      lstrip_blocks=True))

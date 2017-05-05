@@ -1,1 +1,1 @@
-from .model import TrelloExtraction, Card, List, Comment
+from .extractor import TrelloExtractor, Card, List, Comment
