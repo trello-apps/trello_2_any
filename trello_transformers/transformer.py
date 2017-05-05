@@ -1,15 +1,33 @@
 class Transformer:
-    def transform_board_name(self, name):
+    def __init__(self):
+        self.output = []
+
+    def append(self, line):
+        self.output.append(line)
+
+    def get_output(self):
+        return self.output
+
+    def board_begin(self, name):
         raise NotImplementedError()
 
-    def transform_list_name(self, name):
+    def board_end(self):
         raise NotImplementedError()
 
-    def transform_card_name(self, name):
+    def list_begin(self, name):
         raise NotImplementedError()
 
-    def transform_card_comment(self, comment, author):
+    def list_end(self):
         raise NotImplementedError()
 
-    def transform_card_votes(self, voters):
+    def card(self, name):
+        raise NotImplementedError()
+
+    def card_description(self, name):
+        raise NotImplementedError()
+
+    def card_comment(self, comment, author):
+        raise NotImplementedError()
+
+    def card_votes(self, voters):
         raise NotImplementedError()

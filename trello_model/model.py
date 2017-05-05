@@ -1,7 +1,7 @@
 from collections import namedtuple
 
 List = namedtuple('List', ['id', 'name', 'cards'])
-Card = namedtuple('Card', ['id', 'name', 'comments', 'voters'])
+Card = namedtuple('Card', ['id', 'name', 'description', 'comments', 'voters'])
 Comment = namedtuple('Comment', ['text', 'author'])
 
 
@@ -11,17 +11,20 @@ class TrelloExtraction:
         self.name = 'NA'
         # for test purposes
         if trello is not None:
-            self.name = trello.boards.get(board_id)['name']
+            self.name = trello.boards.get(board_id)['name'].encode('utf-8')
             for trello_list in trello.boards.get_list(board_id):
-                current_list = List(trello_list['id'], trello_list['name'], [])
+                current_list = List(trello_list['id'], trello_list['name'].encode('utf-8'), [])
                 for card in trello.lists.get_card(trello_list['id']):
+                    description = None if not card['desc'] \
+                        else card['desc'].encode('utf-8')
                     comments = [] if card['badges']['comments'] == 0 \
                         else self._retrieve_comments(trello, card['id'])
                     voters = [] if card['badges']['votes'] == 0 \
                         else self._voters_id_to_username(trello,
                                                          card['idMembersVoted'])
                     current_list.cards.append(Card(card['id'],
-                                                   card['name'],
+                                                   card['name'].encode('utf-8'),
+                                                   description,
                                                    comments,
                                                    voters))
                 self.board.append(current_list)
@@ -30,7 +33,7 @@ class TrelloExtraction:
 Trello, your model is empty!")
 
     def _retrieve_comments(self, trello, card_id):
-        return [Comment(action['data']['text'],
+        return [Comment(action['data']['text'].encode('utf-8'),
                         action['memberCreator']['fullName'])
                 for action in trello.cards.get_action(card_id)
                 if action['type'] == 'commentCard']
@@ -40,20 +43,24 @@ Trello, your model is empty!")
                         voters))
 
     def apply_transformer(self, transformer):
-        output = []
-        output.append(transformer.transform_board_name(self.name))
+        transformer.board_begin(self.name)
         for board_list in self.board:
-            output.append(transformer.transform_list_name(board_list.name))
+            transformer.list_begin(board_list.name)
             for card in board_list.cards:
-                output.append(transformer.transform_card_name(card.name))
+                transformer.card(card.name)
+                if card.description is not None:
+                    transformer.card_description(card.description)
                 if len(card.comments) > 0:
                     for comment, author in card.comments:
-                        output.append(transformer.transform_card_comment(
-                                      comment,
-                                      author))
+                        transformer.card_comment(
+                            comment,
+                            author)
                 if len(card.voters) > 0:
-                    output.append(transformer.transform_card_votes(card.voters))
-        return "\n".join(output)
+                    transformer.card_votes(card.voters)
+            transformer.list_end()
+        transformer.board_end()
+
+        return "\n".join(transformer.get_output())
 
     def apply_template(self, template):
         print(template.render({'title': self.name,

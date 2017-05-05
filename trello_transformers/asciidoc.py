@@ -2,17 +2,26 @@ from .transformer import Transformer
 
 
 class AsciiDocTransformer(Transformer):
-    def transform_board_name(self, name):
-        return "{}\n{}".format(name, "=" * len(name))
+    def board_begin(self, name):
+        self.append('{}\n{}'.format(name, '=' * len(name)))
 
-    def transform_list_name(self, name):
-        return "{}\n{}".format(name, '-' * len(name))
+    def board_end(self):
+        pass
 
-    def transform_card_name(self, name):
-        return "* {}".format(name)
+    def list_begin(self, name):
+        self.append('{}\n{}'.format(name, '-' * len(name)))
 
-    def transform_card_comment(self, comment, author):
-        return "** comment by {}: {}".format(author, comment)
+    def list_end(self):
+        pass
 
-    def transform_card_votes(self, voters):
-        return "** {} votes by: {}".format(len(voters), ", ".join(voters))
+    def card(self, name):
+        self.append('* {}'.format(name))
+
+    def card_description(self, name):
+        self.append('** {}'.format(name))
+
+    def card_comment(self, comment, author):
+        self.append('** comment by {}: {}'.format(author, comment))
+
+    def card_votes(self, voters):
+        self.append('** {} vote(s) by: {}'.format(len(voters), ', '.join(voters)))
