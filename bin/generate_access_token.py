@@ -1,5 +1,6 @@
-from trello import TrelloApi
 import argparse
+
+from trello import TrelloApi
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--client-api-key", help="your app's client api key",

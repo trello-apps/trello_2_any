@@ -1,10 +1,8 @@
+import argparse
+
 from trello import TrelloApi
 
-from trello_model import TrelloExtraction
-from trello_transformers import MarkdownTransformer, AsciiDocTransformer, \
-                                ConfluenceTransformer
-
-import argparse
+from trello_model.converter import TrelloConverter, Target
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-c", "--client-api-key", help="your app's client api key",
@@ -18,9 +16,10 @@ args = vars(parser.parse_args())
 trello = TrelloApi(args['client_api_key'])
 trello.set_token(args['token'])
 
-extraction = TrelloExtraction(trello, args['board_id'])
-print(extraction.apply_transformer(MarkdownTransformer()))
+converter = TrelloConverter(trello, args['board_id'])
+
+print(converter.to(Target.MARKDOWN))
 print("-" * 100)
-print(extraction.apply_transformer(AsciiDocTransformer()))
+print(converter.to(Target.ASCIIDOC))
 print("-" * 100)
-print(extraction.apply_transformer(ConfluenceTransformer()))
+print(converter.to(Target.CONFLUENCE))
