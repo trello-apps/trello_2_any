@@ -1,6 +1,6 @@
 # Trello 2 Any
 
-![Build Status](http://chadimasri.com:35718/buildStatus/icon?job=trello-to-any)
+![Build Status](https://www.chadimasri.com/jenkins/buildStatus/icon?job=trello-to-any)
 
 ## Getting started
 
